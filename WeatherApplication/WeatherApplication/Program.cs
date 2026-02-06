@@ -1,4 +1,7 @@
 
+using WeatherApplication.Repositories;
+using WeatherApplication.Services;
+
 namespace WeatherApplication
 {
     public class Program
@@ -8,11 +11,30 @@ namespace WeatherApplication
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddHttpClient();
+            builder.Services.AddControllers().AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowNamedFloatingPointLiterals;
+            });
 
-            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
+            builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddSingleton<WeatherForecastRepository>();
+
+            // Redis as IDistributedCache
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+                options.InstanceName = "WeatherApp:";
+            });
+
+            //builder.Services.AddHttpClient<WeatherForecastRepository>(client =>
+            //{
+            //    client.BaseAddress = new Uri(builder.Configuration["Weather:ApiKey"] ?? "");
+            //});
 
             var app = builder.Build();
 

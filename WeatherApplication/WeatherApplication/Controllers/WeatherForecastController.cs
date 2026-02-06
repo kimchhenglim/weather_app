@@ -1,33 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
+using WeatherApplication.Dtos.Outgoing;
+using WeatherApplication.Services;
 
 namespace WeatherApplication.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
+        private readonly IConfiguration _configuration;
+        
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherForecastService _weatherForecastService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(WeatherForecastService weatherForecastService, ILogger<WeatherForecastController> logger, IConfiguration configuration)
         {
             _logger = logger;
+            _configuration = configuration;
+            _weatherForecastService = weatherForecastService;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet(Name = "GetByCity")]
+        public async Task<ActionResult<WeatherForecastResponse?>> Get(string? city)
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            if (string.IsNullOrWhiteSpace(city)) return BadRequest("City not match");
+
+            WeatherForecastResponse? result = await _weatherForecastService.GetWeatherAsync(city.ToUpper());
+
+            return result;
         }
     }
 }
