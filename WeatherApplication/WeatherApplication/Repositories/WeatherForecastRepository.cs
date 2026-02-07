@@ -39,9 +39,9 @@ namespace WeatherApplication.Repositories
                     weatherForecastDto.TempMax = days.Tempmax;
                     weatherForecastDto.TempMin = days.Tempmin;
                     weatherForecastDto.Temp = days.Temp;
-                    weatherForecastDto.FeelLikeMax = days.FeelLikeMax;
-                    weatherForecastDto.FeelLikeMin = days.FeelLikeMin;
-                    weatherForecastDto.FeelLike = days.FeelLike;
+                    weatherForecastDto.FeelLikeMax = days.FeelsLikeMax;
+                    weatherForecastDto.FeelLikeMin = days.FeelsLikeMin;
+                    weatherForecastDto.FeelLike = days.FeelsLike;
                 }
 
                 return weatherForecastDto;

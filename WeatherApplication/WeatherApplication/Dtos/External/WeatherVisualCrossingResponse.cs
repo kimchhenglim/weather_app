@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace WeatherApplication.Dtos.External
 {
@@ -18,8 +19,11 @@ namespace WeatherApplication.Dtos.External
         public double? Tempmax { get; set; } = double.NaN;
         public double? Tempmin { get; set; } = double.NaN;
         public double? Temp { get; set; } = double.NaN;
-        public double? FeelLikeMax { get; set; } = double.NaN;
-        public double? FeelLikeMin { get; set; } = double.NaN;
-        public double? FeelLike { get; set; } = double.NaN;
+        [JsonPropertyName("feelslikemax")]
+        public double? FeelsLikeMax { get; set; } = double.NaN;
+        [JsonPropertyName("feelslikemin")]
+        public double? FeelsLikeMin { get; set; } = double.NaN;
+        [JsonPropertyName("feelslike")]
+        public double? FeelsLike { get; set; } = double.NaN;
     }
 }

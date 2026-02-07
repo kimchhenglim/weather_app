@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using WeatherApplication.Dtos.Outgoing;
 using WeatherApplication.Services;
 
@@ -21,6 +22,7 @@ namespace WeatherApplication.Controllers
         }
 
         [HttpGet(Name = "GetByCity")]
+        [EnableRateLimiting("request-policy")]
         public async Task<ActionResult<WeatherForecastResponse?>> Get(string? city)
         {
             if (string.IsNullOrWhiteSpace(city)) return BadRequest("City not match");
